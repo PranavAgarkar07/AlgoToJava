@@ -1,17 +1,31 @@
 public class knapsackFractional {
 
-    public static void sort(Number arr[][], int length) {
-        for (int i = 0; i < length; i++) {
-            for (int k = i + 1; k < length; k++) {
+    public static void quickSort(Number[][] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
 
-                if (arr[i][2].doubleValue() < arr[k][2].doubleValue()) {
-                  
-                    Number[] temp = arr[i];
-                    arr[i] = arr[k];
-                    arr[k] = temp;
-                }
+    public static int partition(Number[][] arr, int low, int high) {
+        double pivot = arr[high][2].doubleValue();
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j][2].doubleValue() >= pivot) {  
+                i++;
+                Number[] temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
             }
         }
+
+        // Put the pivot in its final position
+        Number[] temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
     }
 
     public static void fknap(Number[][] arr, int length, int size) {
@@ -20,7 +34,7 @@ public class knapsackFractional {
             arr[i][2] = relative;
         }
 
-        sort(arr, length);
+        quickSort(arr, 0, length - 1);
 
         double totalProfit = 0;
         int currentWeight = 0;
